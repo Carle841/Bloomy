@@ -68,6 +68,11 @@ tr:hover {
     color: white;
 }
 
+.btn-editar {
+    background-color: #1b74c2;
+    color: white;
+}
+
 .btn-eliminar {
     background-color: #e74c3c;
     color: white;

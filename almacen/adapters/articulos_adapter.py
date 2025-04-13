@@ -20,7 +20,7 @@ class ArticulosAdapter(ArticulosPort):
         if fila is None:
             return None
 
-        return Articulo(fila["id"], fila["codigo"], fila["nombre"])
+        return Articulo(fila["id"], fila["nombre"], fila["precio"])
 
     def find_all(self, filtro: str) -> list:
         filas = self.db.queryall(
@@ -38,7 +38,7 @@ class ArticulosAdapter(ArticulosPort):
     def save(self, articulo: Articulo) -> None:
         sql = """
         insert into articulo (id, nombre, precio) 
-        values (%(id)s, %(codigo)s, %(nombre)s)
+        values (%(id)s, %(nombre)s, %(precio)s)
         on conflict (id) do update set nombre=%(nombre)s, precio=%(precio)s
         """
 

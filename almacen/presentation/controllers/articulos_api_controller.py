@@ -12,7 +12,7 @@ def articulos_api_create():
         articulos_repository = ArticulosAdapter(db)
         articulosService = ArticulosService(articulos_repository)
         articuloId = articulosService.get_next_id()
-        articulo = Articulo(id=articuloId, codigo=request.form["codigo"], nombre=request.form["nombre"])
+        articulo = Articulo(id=articuloId, nombre=request.json["nombre"], precio=request.json["precio"])
         articulosService.add(articulo)
 
         data = {
@@ -24,7 +24,7 @@ def articulos_api_create():
             mimetype='application/json'
         )
         
-@app.route("/articulos-api/delete/<id>", methods=["POST"])
+@app.route("/api/articulos/delete/<id>", methods=["POST"])
 def articulos_api_delete(id):
     articulos_repository = ArticulosAdapter(db)
     articulosService = ArticulosService(articulos_repository)
@@ -87,8 +87,7 @@ def articulos_api_get_one(id):
         mimetype='application/json'
     )
 
-@app.route("/api/articulos/update/<id>", methods=["POST"])
-
+@app.route("/api/articulos/edit/<id>", methods=["POST"])
 def articulos_api_update(id):
     articulos_repository = ArticulosAdapter(db)
     articulosService = ArticulosService(articulos_repository)

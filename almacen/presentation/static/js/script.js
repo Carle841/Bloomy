@@ -78,8 +78,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 <td>${producto.nombre}</td>
                 <td>${Number(producto.precio).toFixed(2)}bs.</td>
                 <td class="acciones">
-                    <button class="btn-editar" data-index="${index}>Editar</button>
-                    <button class="bth-eliminar" data-index="${index}>Eliminar</button>
+                    <button class="btn-editar" data-index="${producto.id}">Editar</button>
+                    <button class="btn-eliminar" data-index="${producto.id}">Eliminar</button>
                 </td>`;
             cuerpoTabla.appendChild(fila);
         });
@@ -114,13 +114,21 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        const formData = new FormData();
-        formData.append('nombre', nombre);
-        formData.append('precio', precio);
+        const precioNumerico = parseFloat(precio);
 
-        fetch('/articulos/create', {
+        const datos = {
+            nombre: nombre,
+            precio: precioNumerico
+        };
+
+        console.log('Datos a enviar:', datos);
+
+        fetch('/api/articulos/create', {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos)
         })
         .then(response => {
             if(!response.ok){
@@ -135,8 +143,10 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    function abrirModalEditar(event){
-        const productoId = event.target.dataset.index;
+    function abrirModalModificar(event){
+        const productoId = Number(event.target.dataset.index);
+        console.log('ID del producto buscado:', productoId, 'Tipo:', typeof productoId);
+        console.log('IDs disponibles:', productos.map(p => ({ id: p.id, tipo: typeof p.id })));
         const producto = productos.find(p => p.id === productoId);
         if (!producto) {
             console.error('Producto no encontrado:', productoId);
@@ -155,7 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function confirmarModicacion(){
-        const id = document.getElementById('indeceModificar').value;
+        const id = document.getElementById('indiceModificar').value;
         const nombre = document.getElementById('nombreModificar').value.trim();
         const precio = document.getElementById('precioModificar').value.trim();
 
@@ -163,13 +173,17 @@ document.addEventListener("DOMContentLoaded", function () {
             alert('Por favor, complete todos los campos.');
             return;
         }
-        const formData = new FormData();
-        formData.append('nombre', nombre);
-        formData.append('precio', precio);
+        const datos = {
+            nombre: nombre,
+            precio: precio
+        };
 
-        fetch(`/articulos/edit/${id}`, {
+        fetch(`/api/articulos/edit/${id}`, {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos)
         })
         .then(response => {
             if(!response.ok){
@@ -187,7 +201,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function abrirModalEliminar(event){
-        const index = event.target.dataset.index;
+        const productoId = Number(event.target.dataset.index);
 
         document.getElementById('indiceEliminar').value = productoId;
 
@@ -201,7 +215,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function confirmarEliminacion(){
         const id = document.getElementById('indiceEliminar').value;
             
-            fetch(`/articulos/delete/${id}`, {
+            fetch(`/api/articulos/delete/${id}`, {
                 method: 'POST'
             })
             .then(response => {
