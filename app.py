@@ -1,4 +1,4 @@
-from almacen import app
+from administrador import app
 
 if __name__ == '__main__':
     app.run()
