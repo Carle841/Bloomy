@@ -12,8 +12,11 @@ cors = CORS(app, resources={r"/api/articulos": {"origins": "*"}})
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 db = PGCommand()
+app.debug = True
 
 
 from administrador.presentation.controllers.site_controller import *
 from administrador.presentation.controllers.articulos_controller import *
 from administrador.presentation.controllers.articulos_api_controller  import *
+from administrador.presentation.controllers.usuarios_api_controller import *
+

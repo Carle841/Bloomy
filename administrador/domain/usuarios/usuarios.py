@@ -1,10 +1,15 @@
+from datetime import datetime
 class Usuario:
-    def __init__(self, id: int, nombre: str, email: str, rol: str, estado: str):
+    def __init__(self, id: int, nombre: str, email: str, id_rol: int, estado: str, ultimo_acceso: datetime = None, fecha_registro: datetime = None, telefono: str = "", contraseña: str = ""):
         self._id = id
         self._nombre = nombre
         self._email = email
-        self._rol = rol
+        self._rol = id_rol  
         self._estado = estado
+        self._ultimo_acceso = ultimo_acceso
+        self._fecha_registro = fecha_registro
+        self._telefono = telefono
+        self._contraseña = contraseña
 
     def get_id(self) -> int:
         return self._id
@@ -23,6 +28,9 @@ class Usuario:
 
     def set_nombre(self, valor: str):
         self._nombre = valor
+        
+    def set_telefono(self, valor: str):
+        self._telefono = valor
 
     def set_email(self, valor: str):
         self._email = valor
@@ -32,6 +40,24 @@ class Usuario:
 
     def set_estado(self, valor: str):
         self._estado = valor
+        
+    def set_contraseña(self, valor: str):
+        self._contraseña = valor
 
-    def __str__(self):
-        return f"Usuario [id={self._id}, nombre={self._nombre}, email={self._email}, rol={self._rol}, estado={self._estado}]"
+    def get_ultimo_acceso(self):
+        return self._ultimo_acceso
+
+    def get_fecha_registro(self):
+        return self._fecha_registro
+
+    def get_telefono(self):
+        return self._telefono
+
+    def get_contraseña(self):
+        return self._contraseña
+
+    def set_ultimo_acceso(self, fecha: datetime):
+        self._ultimo_acceso = fecha
+        
+    def set_fecha_registro(self, fecha: datetime):
+        self._fecha_registro = fecha

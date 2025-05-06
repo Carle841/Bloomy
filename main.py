@@ -15,7 +15,7 @@ def main():
             id=nuevo_id,
             nombre="Maria Lopez",
             email="maria@example.com",
-            rol="admin",
+            rol="1",
             estado="activo"
         )
         usuario_repo.store(nuevo_usuario)
