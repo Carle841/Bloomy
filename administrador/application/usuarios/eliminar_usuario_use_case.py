@@ -5,4 +5,8 @@ class EliminarUsuarioUseCase:
         self.repo = repo
 
     def execute(self, id):
+        usuario_existente = self.repo.get_by_id(id)
+        if not usuario_existente:
+            raise Exception("Usuario no encontrado")
+        
         self.repo.delete(id)

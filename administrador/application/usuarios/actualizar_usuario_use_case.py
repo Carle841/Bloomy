@@ -7,14 +7,19 @@ class ActualizarUsuarioUseCase:
         self.repo = repo
 
     def execute(self, id, nombre, email, id_rol, estado, telefono, contraseña):
-        usuario = Usuario(
+        usuario_existente = self.repo.get_by_id(id)
+        if not usuario_existente:
+            raise Exception("Usuario no encontrado")
+        
+        usuario_actualizado = Usuario(
             id=id,
             nombre=nombre,
             email=email,
-            rol=id_rol,
+            id_rol=id_rol,
             estado=estado,
             ultimo_acceso=datetime.now(),
+            fecha_registro=usuario_existente.get_fecha_registro(),
             telefono=telefono,
             contraseña=contraseña
         )
-        self.repo.store(usuario)
+        self.repo.store(usuario_actualizado)
