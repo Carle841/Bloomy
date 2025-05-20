@@ -1,0 +1,127 @@
+/* Paleta de colores */
+:root {
+    --beige: #F5EBDF;
+    --rosa-palido: #F9C4B9;
+    --coral: #F47C72;
+    --turquesa-medio: #5D9BA3;
+    --turquesa-claro: #7BC4B8;
+    --menta: #D1E7CF;
+}
+
+/* Aplicar Satoshi a todo el documento */
+body {
+    font-family: 'Satoshi', sans-serif;
+}
+
+.bloomy-container {
+    background-color: var(--turquesa-claro);
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.vintage-paper {
+    background-color: var(--beige);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.logo {
+    color: var(--coral);
+    font-family: 'Satoshi', sans-serif; /* Cambiado a Satoshi */
+    font-size: 3.5rem;
+    text-shadow: 2px 2px var(--rosa-palido);
+    font-weight: 900; /* Peso más grueso para el logo */
+}
+
+.logo-subtitle {
+    color: var(--turquesa-medio);
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    font-weight: 500;
+}
+
+.quote {
+    color: var(--turquesa-medio);
+    font-style: italic;
+    margin-top: 1rem;
+    font-weight: 300;
+}
+
+/* Estilos para cards */
+.admin-card {
+    border: 3px solid var(--turquesa-medio);
+    border-radius: 12px;
+    background: var(--menta);
+    transition: all 0.3s ease;
+    color: var(--turquesa-medio);
+    overflow: hidden;
+    height: 100%;
+    text-decoration: none;
+}
+
+.admin-card:hover {
+    transform: scale(1.03);
+    background: var(--rosa-palido);
+    border-color: var(--coral);
+}
+
+.admin-card:hover .card-icon i {
+    color: var(--coral);
+}
+
+.card-icon {
+    padding: 2rem;
+    background-color: var(--beige);
+    text-align: center;
+    border-bottom: 3px solid var(--turquesa-medio);
+}
+
+.card-icon i {
+    font-size: 3.5rem;
+    color: var(--turquesa-medio);
+    transition: color 0.3s ease;
+}
+
+.card-body {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.card-title {
+    color: var(--turquesa-medio);
+    font-size: 1.4rem;
+    font-weight: 700; /* Ajuste de peso para Satoshi */
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.footer {
+    margin-top: 3rem;
+    padding: 1.5rem;
+    background-color: var(--turquesa-medio);
+    color: white;
+    text-align: center;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: 400;
+}
+
+.footer p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.footer p:first-child {
+    font-weight: 700; /* Peso más grueso para el título */
+    margin-bottom: 0.5rem;
+}
+
+.footer:hover {
+    background-color: var(--turquesa-claro);
+}
