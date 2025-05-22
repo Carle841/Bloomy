@@ -8,24 +8,26 @@ class IconoRepositoryPgImpl(IconoRepositoryPort):
 
     def get_by_id(self, id: int) -> Icono | None:
         fila = self.db.queryone("""
-            SELECT icono_id, nombre
+            SELECT icono_id, nombre, url
             FROM tienda.iconos
             WHERE icono_id = %(icono_id)s
         """, {"icono_id": id})
         if fila:
-            return Icono(fila["icono_id"], fila["nombre"])
+            return Icono(fila["icono_id"], fila["nombre"], fila["url"])
         return None
 
     def store(self, icono: Icono) -> None:
         sql = """
-        INSERT INTO tienda.iconos (icono_id, nombre)
-        VALUES (%(icono_id)s, %(nombre)s)
+        INSERT INTO tienda.iconos (icono_id, nombre, url)
+        VALUES (%(icono_id)s, %(nombre)s, %(url)s)
         ON CONFLICT (icono_id) DO UPDATE SET
-            nombre = EXCLUDED.nombre
+            nombre = EXCLUDED.nombre,
+            url = EXCLUDED.url
         """
         self.db.execute(sql, {
             "icono_id": icono.get_id(),
-            "nombre": icono.get_nombre()
+            "nombre": icono.get_nombre(),
+            "url": icono.get_url()
         })
 
     def delete(self, id: int) -> None:
@@ -37,8 +39,8 @@ class IconoRepositoryPgImpl(IconoRepositoryPort):
 
     def find(self, filtro: str) -> list[Icono]:
         filas = self.db.queryall("""
-            SELECT icono_id, nombre
+            SELECT icono_id, nombre, url
             FROM tienda.iconos
             WHERE nombre ILIKE %(filtro)s
         """, {"filtro": f"%{filtro}%"})
-        return [Icono(f["icono_id"], f["nombre"]) for f in filas]
+        return [Icono(f["icono_id"], f["nombre"], f["url"]) for f in filas]

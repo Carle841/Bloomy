@@ -5,6 +5,6 @@ class ActualizarIconoUseCase:
     def __init__(self, repo: IconoRepositoryPort):
         self.repo = repo
 
-    def execute(self, id: int, nombre: str):
-        icono = Icono(id, nombre)
+    def execute(self, id: int, nombre: str, url: str):
+        icono = Icono(id, nombre, url)
         self.repo.store(icono)

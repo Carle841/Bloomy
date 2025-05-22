@@ -29,3 +29,4 @@ print("🚀 icono_api_controller cargado")
 from administrador.presentation.controllers.categoria_api_controller import *
 from administrador.presentation.controllers.color_api_controller import *
 
+

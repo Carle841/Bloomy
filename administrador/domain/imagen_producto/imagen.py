@@ -1,6 +1,6 @@
 class Imagen:
-    def __init__(self, imagen_id, producto_id, url):
-        self.__id = imagen_id
+    def __init__(self, id, producto_id, url):
+        self.__id = id
         self.__producto_id = producto_id
         self.__url = url
 

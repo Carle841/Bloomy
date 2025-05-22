@@ -10,14 +10,12 @@ from administrador.application.categorias.eliminar_categoria_usecase import Elim
 from administrador.application.categorias.obtener_categoria_usecase import ObtenerCategoriaUseCase
 from administrador.application.categorias.buscar_categoria_usecase import BuscarCategoriaUseCase
 from administrador.application.categorias.actualizar_categoria_usecase import ActualizarCategoriaUseCase
+from administrador.application.categorias.buscar_categoria_detallada_usecase import BuscarCategoriaDetalladaUseCase
 from administrador import app, db
 
-@app.route("/categorias", methods=["GET"])
-def categorias_index():
-    categoria_repository = CategoriaRepositoryPgImpl(db)
-    categoriaService = categoria_service(categoria_repository)
-    categorias = categoriaService.find("")
-    return render_template("categorias/index.html", categorias=categorias)
+@app.route("/categorias2", methods=["GET"])
+def categorias_index2():
+    return  "categoriasdfsdafsdafdsaf"
 
 
 @app.route("/api/categorias/create", methods=["POST"])
@@ -31,7 +29,6 @@ def categorias_api_create():
         nuevo_id = caso_uso.execute(
             nombre=data["nombre"],
             descripcion=data["descripcion"],
-            estado=data["estado"],
             icono_id=int(data["icono_id"]),
             color_id=int(data["color_id"])
         )
@@ -90,7 +87,6 @@ def categorias_api_index():
                 "id": categoria.get_id(),
                 "nombre": categoria.get_nombre(),
                 "descripcion": categoria.get_descripcion(),
-                "estado": categoria.get_estado(),
                 "icono_id": categoria.get_icono_id(),
                 "color_id": categoria.get_color_id()
             })
@@ -131,7 +127,6 @@ def categorias_api_get_one(id):
                 "id": categoria.get_id(),
                 "nombre": categoria.get_nombre(),
                 "descripcion": categoria.get_descripcion(),
-                "estado": categoria.get_estado(),
                 "icono_id": categoria.get_icono_id(),
                 "color_id": categoria.get_color_id()
             }
@@ -162,7 +157,6 @@ def categorias_api_update(id):
             id=int(id),
             nombre=data["nombre"],
             descripcion=data["descripcion"],
-            estado=data["estado"],
             icono_id=int(data["icono_id"]),
             color_id=int(data["color_id"])
         )
@@ -183,3 +177,25 @@ def categorias_api_update(id):
         response=json.dumps(response),
         mimetype='application/json'
     )
+    
+
+@app.route("/api/categorias/detalladas", methods=["GET"])
+def categorias_api_detalladas():
+    try:
+        repo = CategoriaRepositoryPgImpl(db)
+        use_case = BuscarCategoriaDetalladaUseCase(repo)
+        categorias = use_case.execute()
+
+        return app.response_class(
+            response=json.dumps(categorias),
+            mimetype='application/json'
+        )
+    except Exception as e:
+        return app.response_class(
+            response=json.dumps({
+                "success": "0",
+                "error": str(e)
+            }),
+            mimetype='application/json'
+        )
+

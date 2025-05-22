@@ -41,7 +41,7 @@ class ImagenRepositoryPgImpl(ImagenRepositoryPort):
     def delete(self, id: int) -> None:
         self.db.execute("DELETE FROM tienda.imagenes WHERE id = %(id)s", {"id": id})
 
-    def find_by_producto_id(self, producto_id: int) -> list[Imagen]:
+    def find(self, producto_id: int) -> list[Imagen]:
         filas = self.db.queryall("""
             SELECT id, producto_id, url
             FROM tienda.imagenes

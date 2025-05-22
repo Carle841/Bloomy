@@ -6,13 +6,12 @@ class CrearCategoriaUseCase:
     def __init__(self, repo: CategoriaRepositoryPort):
         self.repo = repo
 
-    def execute(self, nombre, descripcion, estado, icono_id, color_id):
+    def execute(self, nombre, descripcion, icono_id, color_id):
         nuevo_id = self.repo.next_identity()
         categoria = Categoria(
             id=nuevo_id,
             nombre=nombre,
             descripcion=descripcion,
-            estado=estado,
             icono_id=icono_id,
             color_id=color_id
         )

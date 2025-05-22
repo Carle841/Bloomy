@@ -21,3 +21,8 @@ class CategoriaRepositoryPort(ABC):
     @abstractmethod
     def find(self, filtro: str) -> list[Categoria]:
         pass
+    
+    @abstractmethod
+    def find_with_details(self) -> list[dict]:
+        pass
+

@@ -11,7 +11,7 @@ export default {
         { title: 'Combos', icon: 'layer-group', link: 'combos.html' },
         { title: 'Promociones', icon: 'tag', link: 'promociones.html' },
         { title: 'Administración', icon: 'cogs', link: 'administracion.html' },
-        { title: 'Categorias-Colecciones', icon: 'tags', link: 'categorias/index.html' }
+        { title: 'Categorias-Colecciones', icon: 'tags', link: '/categorias' }
       ]
     };
   },

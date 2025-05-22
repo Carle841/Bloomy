@@ -8,7 +8,7 @@ class CategoriaRepositoryPgImpl(CategoriaRepositoryPort):
 
     def get_by_id(self, id: int) -> Categoria | None:
         fila = self.db.queryone("""
-            SELECT id, nombre, descripcion, estado, icono_id, color_id
+            SELECT id, nombre, descripcion, icono_id, color_id
             FROM tienda.categorias
             WHERE id = %(id)s
         """, {"id": id})
@@ -17,7 +17,6 @@ class CategoriaRepositoryPgImpl(CategoriaRepositoryPort):
                 id=fila["id"],
                 nombre=fila["nombre"],
                 descripcion=fila["descripcion"],
-                estado=fila["estado"],
                 icono_id=fila["icono_id"],
                 color_id=fila["color_id"]
             )
@@ -25,12 +24,11 @@ class CategoriaRepositoryPgImpl(CategoriaRepositoryPort):
 
     def store(self, categoria: Categoria) -> None:
         sql = """
-        INSERT INTO tienda.categorias (id, nombre, descripcion, estado, icono_id, color_id)
-        VALUES (%(id)s, %(nombre)s, %(descripcion)s, %(estado)s, %(icono_id)s, %(color_id)s)
+        INSERT INTO tienda.categorias (id, nombre, descripcion, icono_id, color_id)
+        VALUES (%(id)s, %(nombre)s, %(descripcion)s, %(icono_id)s, %(color_id)s)
         ON CONFLICT (id) DO UPDATE SET
             nombre = EXCLUDED.nombre,
             descripcion = EXCLUDED.descripcion,
-            estado = EXCLUDED.estado,
             icono_id = EXCLUDED.icono_id,
             color_id = EXCLUDED.color_id
         """
@@ -38,7 +36,6 @@ class CategoriaRepositoryPgImpl(CategoriaRepositoryPort):
             "id": categoria.get_id(),
             "nombre": categoria.get_nombre(),
             "descripcion": categoria.get_descripcion(),
-            "estado": categoria.get_estado(),
             "icono_id": categoria.get_icono_id(),
             "color_id": categoria.get_color_id()
         })
@@ -52,7 +49,7 @@ class CategoriaRepositoryPgImpl(CategoriaRepositoryPort):
 
     def find(self, filtro: str) -> list[Categoria]:
         filas = self.db.queryall("""
-            SELECT id, nombre, descripcion, estado, icono_id, color_id
+            SELECT id, nombre, descripcion, icono_id, color_id
             FROM tienda.categorias
             WHERE nombre ILIKE %(filtro)s OR descripcion ILIKE %(filtro)s
         """, {"filtro": f"%{filtro}%"})
@@ -61,8 +58,28 @@ class CategoriaRepositoryPgImpl(CategoriaRepositoryPort):
                 id=f["id"],
                 nombre=f["nombre"],
                 descripcion=f["descripcion"],
-                estado=f["estado"],
                 icono_id=f["icono_id"],
                 color_id=f["color_id"]
             ) for f in filas
         ]
+
+    def find_with_details(self) -> list[dict]:
+        sql = """
+            SELECT 
+            c.id,
+            c.nombre,
+            c.descripcion,
+            i.icono_id,
+            i.url AS icono,
+            col.color_id,
+            col.codigo_hex AS color,
+            c.fecha_creacion,
+            COUNT(p.id) AS cantidad_productos
+            FROM tienda.categorias c
+            JOIN tienda.iconos i ON c.icono_id = i.icono_id
+            JOIN tienda.colores col ON c.color_id = col.color_id
+            LEFT JOIN tienda.productos p ON p.categoria_id = c.id
+            GROUP BY c.id, c.nombre, i.icono_id, i.url, col.color_id, col.codigo_hex, c.fecha_creacion
+        """
+        filas = self.db.queryall(sql, {})
+        return filas
