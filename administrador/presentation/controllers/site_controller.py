@@ -8,3 +8,7 @@ def site_index():
 @app.route('/categorias')
 def categorias():
     return render_template('categorias/index.html', title='Categorias' )
+
+@app.route('/productos')
+def productos():
+    return render_template('productos/index.html', title='Productos' )

@@ -5,13 +5,15 @@ export default {
     return {
       
       menuItems: [
-        { title: 'Productos', icon: 'box-open', link: '../productos.html' },
-        { title: 'Ventas', icon: 'chart-line', link: 'ventas.html' },
-        { title: 'Compras', icon: 'shopping-basket', link: 'compras.html' },
-        { title: 'Combos', icon: 'layer-group', link: 'combos.html' },
-        { title: 'Promociones', icon: 'tag', link: 'promociones.html' },
-        { title: 'Administración', icon: 'cogs', link: 'administracion.html' },
-        { title: 'Categorias-Colecciones', icon: 'tags', link: '/categorias' }
+        { title: 'Productos', icon: 'box-open', link: '/productos' },
+        { title: 'Ventas', icon: 'chart-line', link: '/ventas' },
+        { title: 'Compras', icon: 'shopping-basket', link: '/compras' },
+        { title: 'Combos', icon: 'layer-group', link: '/combos' },
+        { title: 'Promociones', icon: 'tag', link: '/promociones' },
+        { title: 'Administración', icon: 'cogs', link: '/administracion' },
+        { title: 'Categorias', icon: 'tags', link: '/categorias' },
+        { title: 'Colecciones', icon: 'tags', link: '/colecciones' },
+        { title: 'Temporadas', icon: 'tags', link: '/temporadas' }
       ]
     };
   },

@@ -5,5 +5,5 @@ class BuscarImagenUseCase:
     def __init__(self, repo: ImagenRepositoryPort):
         self.repo = repo
 
-    def execute(self, filtro: str) -> list[Imagen]:
+    def execute(self, filtro: str):
         return self.repo.find(filtro)

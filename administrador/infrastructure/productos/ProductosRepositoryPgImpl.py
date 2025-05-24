@@ -1,4 +1,5 @@
 from administrador.domain.productos.producto import Producto
+from administrador.domain.productos.productoImagenes import ProductoConImagenes
 from administrador.domain.productos.producto_repository_port import ProductoRepositoryPort
 from administrador.infrastructure.pg_command import PGCommand
 
@@ -73,5 +74,44 @@ class ProductoRepositoryPgImpl(ProductoRepositoryPort):
                 estado=f["estado"],
                 descripcion=f["descripcion"]
             ) for f in filas
+        ]
+        
+    def obtener_productos_con_imagenes(self) -> list[ProductoConImagenes]:
+        sql = """
+        SELECT 
+            p.id,
+            p.nombre,
+            p.codigo,
+            p.categoria_id,
+            c.nombre AS categoria_nombre,
+            p.precio,
+            p.stock,
+            p.estado,
+            p.descripcion,
+            COALESCE(json_agg(json_build_object(
+                'id', i.id,
+                'url', i.url,
+                'descripcion', i.descripcion
+            )) FILTER (WHERE i.id IS NOT NULL), '[]') AS imagenes
+        FROM tienda.productos p
+        LEFT JOIN tienda.categorias c ON p.categoria_id = c.id
+        LEFT JOIN tienda.imagenes i ON p.id = i.producto_id
+        GROUP BY p.id, c.nombre
+        """
+        filas = self.db.queryall(sql, {})
+        return [
+            ProductoConImagenes(
+                id=f["id"],
+                nombre=f["nombre"],
+                codigo=f["codigo"],
+                categoria_id=f["categoria_id"],
+                categoria_nombre=f["categoria_nombre"],
+                precio=f["precio"],
+                stock=f["stock"],
+                estado=f["estado"],
+                descripcion=f["descripcion"],
+                imagenes=f["imagenes"]
+            )
+            for f in filas
         ]
 

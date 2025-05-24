@@ -6,6 +6,7 @@ from administrador.application.productos.actualizar_producto_usecase import Actu
 from administrador.application.productos.eliminar_producto_usecase import EliminarProductoUseCase
 from administrador.application.productos.obtener_producto_usecase import ObtenerProductoUseCase
 from administrador.application.productos.buscar_producto_usecase import BuscarProductoUseCase
+from administrador.application.productos.obtener_productos_con_imagenes_usecase import ObtenerProductosConImagenesUseCase
 from administrador import app, db
 
 @app.route("/api/productos/create", methods=["POST"])
@@ -181,3 +182,26 @@ def productos_api_delete(id):
         mimetype='application/json'
     )
     
+@app.route("/api/productos/imagenes", methods=["GET"])
+def productos_con_imagenes():
+    try:
+        repo = ProductoRepositoryPgImpl(db)
+        use_case = ObtenerProductosConImagenesUseCase(repo)
+        productos = use_case.execute()
+
+        response = [vars(p) for p in productos]
+
+        return app.response_class(
+            response=json.dumps(response),
+            mimetype='application/json'
+        )
+
+    except Exception as e:
+        return app.response_class(
+            response=json.dumps({
+                "success": "0",
+                "error": str(e),
+                "traceback": traceback.format_exc()
+            }),
+            mimetype='application/json'
+        )

@@ -12,21 +12,23 @@ class ImagenRepositoryPgImpl(ImagenRepositoryPort):
 
     def store(self, imagen: Imagen) -> None:
         sql = """
-        INSERT INTO tienda.imagenes (id, producto_id, url)
-        VALUES (%(id)s, %(producto_id)s, %(url)s)
+        INSERT INTO tienda.imagenes (id, producto_id, url, descripcion)
+        VALUES (%(id)s, %(producto_id)s, %(url)s, %(descripcion)s)
         ON CONFLICT (id) DO UPDATE SET
             producto_id = EXCLUDED.producto_id,
-            url = EXCLUDED.url
+            url = EXCLUDED.url,
+            descripcion = EXCLUDED.descripcion
         """
         self.db.execute(sql, {
             "id": imagen.get_id(),
             "producto_id": imagen.get_producto_id(),
-            "url": imagen.get_url()
+            "url": imagen.get_url(),
+            "descripcion": imagen.get_descripcion()
         })
 
     def get_by_id(self, id: int) -> Imagen | None:
         fila = self.db.queryone("""
-            SELECT id, producto_id, url
+            SELECT id, producto_id, url, descripcion
             FROM tienda.imagenes
             WHERE id = %(id)s
         """, {"id": id})
@@ -34,23 +36,25 @@ class ImagenRepositoryPgImpl(ImagenRepositoryPort):
             return Imagen(
                 id=fila["id"],
                 producto_id=fila["producto_id"],
-                url=fila["url"]
+                url=fila["url"], 
+                descripcion=fila["descripcion"]
             )
         return None
 
     def delete(self, id: int) -> None:
         self.db.execute("DELETE FROM tienda.imagenes WHERE id = %(id)s", {"id": id})
 
-    def find(self, producto_id: int) -> list[Imagen]:
+    def find(self, filtro: str) -> list[Imagen]:
         filas = self.db.queryall("""
-            SELECT id, producto_id, url
+            SELECT id, producto_id, url, descripcion
             FROM tienda.imagenes
-            WHERE producto_id = %(producto_id)s
-        """, {"producto_id": producto_id})
+            WHERE url ILIKE %(filtro)s
+        """, {"filtro": f"%{filtro}%"})
         return [
             Imagen(
-                id=f["id"],
-                producto_id=f["producto_id"],
-                url=f["url"]
+                f["id"],
+                f["producto_id"],
+                f["url"],
+                f["descripcion"]
             ) for f in filas
         ]

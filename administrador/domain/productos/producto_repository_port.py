@@ -27,3 +27,6 @@ class ProductoRepositoryPort(ABC):
         """Busca productos que coincidan con un filtro."""
         pass
     
+    @abstractmethod
+    def obtener_productos_con_imagenes(self) -> list:
+        pass

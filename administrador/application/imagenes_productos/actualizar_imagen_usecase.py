@@ -5,6 +5,6 @@ class ActualizarImagenUseCase:
     def __init__(self, repo: ImagenRepositoryPort):
         self.repo = repo
 
-    def execute(self, id: int, producto_id: int, url: str) -> None:
-        imagen_actualizada = Imagen(id=id, producto_id=producto_id, url=url)
+    def execute(self, id: int, producto_id: int, url: str, descripcion:str) -> None:
+        imagen_actualizada = Imagen(id=id, producto_id=producto_id, url=url, descripcion=descripcion)
         self.repo.store(imagen_actualizada)

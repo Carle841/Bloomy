@@ -1,10 +1,4 @@
-/**
- * Componente Vue para gestionar categorías dinámicamente con una API Flask.
- * Utiliza fetch para solicitudes HTTP y muestra una lista de categorías con
- * modales separados para crear/editar y eliminar, estilizados como modales de
- * Bootstrap con fade y estructura de formulario.
- * Soporta búsqueda con debounce y manejo de errores.
- */
+
 export const Categorias = {
   name: 'Categorias',
   props: {
@@ -299,7 +293,7 @@ export const Categorias = {
         </div>
       </div>
 
-      <!-- Modal para crear/editar categoría -->
+      <!-- Modal para categoría -->
       <div v-if="mostrarModalCategoria" class="modal fade show d-block" tabindex="-1">
         <div class="modal-dialog">
           <div class="modal-content">
