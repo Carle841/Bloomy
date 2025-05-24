@@ -6,6 +6,7 @@ from administrador.infrastructure.colecciones_categorias.ColeccionCategoriaRepos
 from administrador.application.colecciones_categorias.crear_coleccion_categoria_usecase import CrearColeccionCategoriaUseCase
 from administrador.application.colecciones_categorias.obtener_coleccion_categoria_usecase import ObtenerColeccionCategoriaUseCase
 from administrador.application.colecciones_categorias.eliminar_coleccion_categoria_usecase import EliminarColeccionCategoriaUseCase
+from administrador.application.colecciones_categorias.contar_categorias_en_coleccion_usecase import ContarCategoriasEnColeccionUseCase
 
 @app.route("/api/colecciones-categorias/<coleccion_id>", methods=["GET"])
 def coleccion_categoria_api_by_coleccion(coleccion_id):
@@ -18,8 +19,9 @@ def coleccion_categoria_api_by_coleccion(coleccion_id):
         data = []
         for relacion in relaciones:
             data.append({
-                "coleccion_id": relacion.get_coleccion_id(),
-                "categoria_id": relacion.get_categoria_id()
+                "coleccion_id": relacion["coleccion_id"],
+                "categoria_id": relacion["categoria_id"],
+                "categoria_nombre": relacion["categoria_nombre"]
             })
 
         return app.response_class(
@@ -86,6 +88,32 @@ def coleccion_categoria_api_delete(coleccion_id, categoria_id):
             mimetype='application/json'
         )
 
+    except Exception as e:
+        return app.response_class(
+            response=json.dumps({
+                "success": "0",
+                "error": str(e),
+                "traceback": traceback.format_exc()
+            }),
+            mimetype='application/json'
+        )
+
+@app.route("/api/colecciones-categorias/count/<coleccion_id>", methods=["GET"])
+def coleccion_categoria_api_count(coleccion_id):
+    try:
+        repo = ColeccionCategoriaRepositoryPgImpl(db)
+        use_case = ContarCategoriasEnColeccionUseCase(repo)
+
+        total = use_case.execute(int(coleccion_id))
+
+        return app.response_class(
+            response=json.dumps({
+                "success": "1",
+                "coleccion_id": int(coleccion_id),
+                "total_categorias": total
+            }),
+            mimetype='application/json'
+        )
     except Exception as e:
         return app.response_class(
             response=json.dumps({

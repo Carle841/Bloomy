@@ -32,10 +32,28 @@ class ColeccionCategoriaRepositoryPgImpl(ColeccionCategoriaRepositoryPort):
         """, {})
         return [ColeccionCategoria(r["coleccion_id"], r["categoria_id"]) for r in rows]
 
-    def find_by_coleccion(self, coleccion_id: int) -> list[ColeccionCategoria]:
+    def find_by_coleccion(self, coleccion_id: int) -> list[dict]:
         rows = self.db.queryall("""
-            SELECT coleccion_id, categoria_id
+            SELECT cc.coleccion_id, cc.categoria_id, c.nombre AS categoria_nombre
+            FROM tienda.colecciones_categorias cc
+            JOIN tienda.categorias c ON cc.categoria_id = c.id
+            WHERE cc.coleccion_id = %(coleccion_id)s
+        """, {"coleccion_id": coleccion_id})
+        
+        return [
+            {
+                "coleccion_id": r["coleccion_id"],
+                "categoria_id": r["categoria_id"],
+                "categoria_nombre": r["categoria_nombre"]
+            }
+            for r in rows
+        ]
+
+    def count_categorias_by_coleccion(self, coleccion_id: int) -> int:
+        row = self.db.queryone("""
+            SELECT COUNT(*) AS total_categorias
             FROM tienda.colecciones_categorias
             WHERE coleccion_id = %(coleccion_id)s
         """, {"coleccion_id": coleccion_id})
-        return [ColeccionCategoria(r["coleccion_id"], r["categoria_id"]) for r in rows]
+
+        return row["total_categorias"]

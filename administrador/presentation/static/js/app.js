@@ -9,11 +9,9 @@ export default {
         { title: 'Ventas', icon: 'chart-line', link: '/ventas' },
         { title: 'Compras', icon: 'shopping-basket', link: '/compras' },
         { title: 'Combos', icon: 'layer-group', link: '/combos' },
-        { title: 'Promociones', icon: 'tag', link: '/promociones' },
         { title: 'Administración', icon: 'cogs', link: '/administracion' },
         { title: 'Categorias', icon: 'tags', link: '/categorias' },
         { title: 'Colecciones', icon: 'tags', link: '/colecciones' },
-        { title: 'Temporadas', icon: 'tags', link: '/temporadas' }
       ]
     };
   },

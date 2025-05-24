@@ -12,3 +12,7 @@ def categorias():
 @app.route('/productos')
 def productos():
     return render_template('productos/index.html', title='Productos' )
+
+@app.route('/colecciones')
+def colecciones():
+    return render_template('colecciones/index.html', title='Colecciones' )

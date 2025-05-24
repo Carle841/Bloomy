@@ -18,3 +18,6 @@ class ColeccionCategoriaRepositoryPort(ABC):
     @abstractmethod
     def find_by_coleccion(self, coleccion_id: int) -> list[ColeccionCategoria]:
         pass
+    
+    @abstractmethod
+    def count_categorias_by_coleccion(self, coleccion_id: int): pass
