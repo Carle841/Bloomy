@@ -69,6 +69,17 @@ body {
     margin-bottom: 2rem;
 }
 
+.categories-container {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    padding: 10px;
+}
+.form-check {
+    margin-bottom: 8px;
+}
+
 .vintage-paper::before {
     content: "";
     position: absolute;
