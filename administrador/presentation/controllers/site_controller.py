@@ -16,3 +16,7 @@ def productos():
 @app.route('/colecciones')
 def colecciones():
     return render_template('colecciones/index.html', title='Colecciones' )
+
+@app.route('/combos')
+def combos():
+    return render_template('combos/index.html', title='Combos' )
