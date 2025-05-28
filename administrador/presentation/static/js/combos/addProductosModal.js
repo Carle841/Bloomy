@@ -30,7 +30,7 @@ const AddProductosModal = {
                                         <small class="d-block text-muted">\${{ product.price.toFixed(2) }} c/u</small>
                                     </label>
                                 </div>
-                                <input type="number" class="form-control form-control-sm qty-input" v-model="product.quantity" min="1">
+                                <input type="number" class="form-control form-control-sm qty-input" v-model.number="product.quantity" min="1">
                             </div>
                         </div>
                     </div>

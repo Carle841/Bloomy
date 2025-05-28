@@ -1,6 +1,7 @@
-from flask import json, request
+from flask import json, request, send_from_directory
 from administrador import app, db
-
+import os
+import uuid
 from administrador.domain.combos.combo import Combo
 from administrador.infrastructure.combos.CombosRepositoryPgImpl import CombosRepositoryPgImpl
 from administrador.application.combos.crear_combo_usecase import CrearComboUseCase
@@ -187,3 +188,64 @@ def combos_api_update(id):
         response=json.dumps(response),
         mimetype='application/json'
     )
+
+@app.route('/api/combos/upload-image', methods=['POST'])
+def combos_api_upload_image():
+    try:
+        if 'image' not in request.files:
+            response = {"error": "No se proporcionó una imagen"}
+            return app.response_class(
+                response=json.dumps(response),
+                status=400,
+                mimetype='application/json'
+            )
+
+        file = request.files['image']
+        combo_id = request.form.get('comboId')
+
+        if not combo_id:
+            response = {"error": "Se requiere el ID del combo"}
+            return app.response_class(
+                response=json.dumps(response),
+                status=400,
+                mimetype='application/json'
+            )
+
+        if file.filename == '':
+            response = {"error": "No se seleccionó un archivo"}
+            return app.response_class(
+                response=json.dumps(response),
+                status=400,
+                mimetype='application/json'
+            )
+
+        # Ruta donde se guardarán las imágenes
+        upload_folder = r"D:\UNIVERSIDAD\2025\1-2025\Arquitectura de Software\Proyecto\BloomyArt\administrador\presentation\static\img\imgCombos"
+        os.makedirs(upload_folder, exist_ok=True)
+
+        # Generar un nombre único para la imagen usando el comboId y un UUID
+        filename = f"combo_{combo_id}_{uuid.uuid4().hex}.jpg"
+        filepath = os.path.join(upload_folder, filename)
+        file.save(filepath)
+
+        # Construir la URL pública para acceder a la imagen
+        image_url = f"http://127.0.0.1:5000/static/img/imgCombos/{filename}"
+        response = {"imageUrl": image_url}
+        return app.response_class(
+            response=json.dumps(response),
+            status=200,
+            mimetype='application/json'
+        )
+
+    except Exception as e:
+        response = {"error": str(e)}
+        return app.response_class(
+            response=json.dumps(response),
+            status=500,
+            mimetype='application/json'
+        )
+        
+@app.route('/static/img/imgCombos/<filename>')
+def serve_image(filename):
+    upload_folder = r"D:\UNIVERSIDAD\2025\1-2025\Arquitectura de Software\Proyecto\BloomyArt\administrador\presentation\static\img\imgCombos"
+    return send_from_directory(upload_folder, filename)

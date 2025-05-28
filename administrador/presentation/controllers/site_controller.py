@@ -20,3 +20,11 @@ def colecciones():
 @app.route('/combos')
 def combos():
     return render_template('combos/index.html', title='Combos' )
+
+@app.route('/principal')
+def principal():
+    return render_template('usuario/index.html', title='BloomyArt - Principal')
+
+@app.route('/catalogo')
+def catalogo():
+    return render_template('usuario/catalogo.html', title='BloomyArt - Catalogo')

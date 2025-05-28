@@ -1,23 +1,54 @@
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 const Combo = {
     data() {
-        const combos = ref([]);
-        const isLoading = ref(true);
-        const errorMessage = ref(null);
-        const successMessage = ref(null);
-        const editCombo = ref(null);
-        const editError = ref(null);
-        const deleteCombo = ref(null);
-        const isSaving = ref(false);
-        return { combos, isLoading, errorMessage, successMessage, editCombo, editError, deleteCombo, isSaving };
+        return {
+            combos: [],
+            isLoading: false,
+            errorMessage: null,
+            successMessage: null,
+            editCombo: null,
+            editError: null,
+            deleteCombo: null,
+            isSaving: false,
+            selectedImage: null // Para almacenar la nueva imagen seleccionada
+        };
     },
     mounted() {
+        console.log('Componente Combo montado, cargando combos...');
         this.cargarCombos();
+        const editModal = document.getElementById('editComboModal');
+        const deleteModal = document.getElementById('deleteComboModal');
+        if (editModal) bootstrap.Modal.getOrCreateInstance(editModal).hide();
+        if (deleteModal) bootstrap.Modal.getOrCreateInstance(deleteModal).hide();
+    },
+    watch: {
+        '$parent.currentTab'(newTab) {
+            if (newTab === 'active') {
+                console.log('Pestaña Combos Activos visible');
+                console.log('Estado de combos:', this.combos);
+                console.log('isLoading:', this.isLoading);
+                if (this.combos.length === 0 && !this.isLoading) {
+                    console.log('Combos vacíos, recargando...');
+                    this.cargarCombos();
+                }
+            }
+        }
     },
     template: /* html */`
-        <div class="tab-pane fade show active" id="pills-active">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <div v-if="isLoading" class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+            </div>
+            <div v-else-if="errorMessage" class="alert alert-danger" role="alert">
+                {{ errorMessage }}
+            </div>
+            <div v-else-if="successMessage" class="alert alert-success" role="alert">
+                {{ successMessage }}
+            </div>
+            <div v-else class="d-flex justify-content-between align-items-center mb-4">
                 <div class="search-box">
                     <i class="fas fa-search"></i>
                     <input type="text" class="form-control" placeholder="Buscar combos..." disabled title="Búsqueda no implementada">
@@ -31,23 +62,7 @@ const Combo = {
                     </button>
                 </div>
             </div>
-            <div v-if="isLoading" class="text-center my-4">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Cargando...</span>
-                </div>
-                <p class="mt-2">Cargando combos...</p>
-            </div>
-            <div v-else-if="errorMessage" class="alert alert-warning" role="alert">
-                {{ errorMessage }}
-            </div>
-            <div v-else-if="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ successMessage }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            <div v-else-if="!combos.length" class="alert alert-info text-center" role="alert">
-                No hay combos activos disponibles.
-            </div>
-            <div v-else class="row">
+            <div v-if="!isLoading && !errorMessage && !successMessage" class="row">
                 <div class="col-md-4 mb-4" v-for="combo in combos" :key="combo.id">
                     <div class="combo-card">
                         <div class="combo-header" :style="'background-image: url(' + (combo.thumbnail || 'https://via.placeholder.com/300x200/F9C4B9/FFFFFF?text=' + encodeURIComponent(combo.name)) + ')'">
@@ -80,10 +95,13 @@ const Combo = {
                         </div>
                     </div>
                 </div>
+                <div v-if="combos.length === 0" class="text-center py-5">
+                    <p>No hay combos disponibles.</p>
+                </div>
             </div>
             <!-- Edit Modal -->
             <div class="modal fade" id="editComboModal" tabindex="-1" aria-labelledby="editComboModalLabel">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="editComboModalLabel">Editar Combo: {{ editCombo?.name || 'Cargando...' }}</h5>
@@ -106,8 +124,7 @@ const Combo = {
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Descuento (%)</label>
-                                    <input type="number" step="0.01" min="0" max="100" class="form-control" v-model.number="editCombo.descuentoPorcentaje" required>
-                                    <div class="invalid-feedback">El descuento debe estar entre 0 y 100%.</div>
+                                    <input type="text" class="form-control" :value="editCombo.descuentoPorcentaje.toFixed(2)" disabled>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Stock</label>
@@ -123,9 +140,20 @@ const Combo = {
                                     <div class="invalid-feedback">Seleccione un estado.</div>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">URL de Imagen</label>
-                                    <input type="url" class="form-control" v-model="editCombo.thumbnail" placeholder="https://ejemplo.com/imagen.jpg">
-                                    <div class="invalid-feedback">Ingrese una URL válida (opcional).</div>
+                                    <label class="form-label">Imagen Actual</label>
+                                    <div v-if="editCombo.thumbnail" class="mb-2">
+                                        <img :src="editCombo.thumbnail" alt="Imagen del Combo" style="max-width: 200px; max-height: 200px; object-fit: cover;">
+                                    </div>
+                                    <div v-else class="text-muted">
+                                        No hay imagen disponible.
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Subir Nueva Imagen</label>
+                                    <input type="file" class="form-control" accept="image/*" @change="onImageChange">
+                                    <div v-if="selectedImage" class="mt-2">
+                                        <img :src="selectedImage" alt="Vista previa de la nueva imagen" style="max-width: 200px; max-height: 200px; object-fit: cover;">
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -141,7 +169,7 @@ const Combo = {
             </div>
             <!-- Delete Confirmation Modal -->
             <div class="modal fade" id="deleteComboModal" tabindex="-1" aria-labelledby="deleteComboModalLabel">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="deleteComboModalLabel">Confirmar Eliminación: {{ deleteCombo?.name || 'Cargando...' }}</h5>
@@ -167,17 +195,26 @@ const Combo = {
             this.isLoading = true;
             this.errorMessage = null;
             this.successMessage = null;
-            fetch('http://127.0.0.1:5000/api/combos')
+
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+            fetch('http://127.0.0.1:5000/api/combos', { signal: controller.signal })
                 .then(response => {
+                    clearTimeout(timeoutId);
+                    console.log('Respuesta recibida:', response);
                     if (!response.ok) {
-                        return response.json().catch(() => ({}))
-                            .then(errorData => {
-                                throw new Error(errorData.message || `Error ${response.status}: No se pudo recuperar la lista de combos.`);
-                            });
+                        return response.json().then(errorData => {
+                            throw new Error(errorData.error || `Error ${response.status}: No se pudo recuperar la lista de combos.`);
+                        });
                     }
                     return response.json();
                 })
                 .then(data => {
+                    console.log('Datos recibidos:', data);
+                    if (data.success === "0") {
+                        throw new Error(data.error || 'Error al cargar combos.');
+                    }
                     if (!Array.isArray(data)) {
                         console.warn('Respuesta de API no es un arreglo:', data);
                         this.combos = [];
@@ -188,7 +225,7 @@ const Combo = {
                     this.combos = data.map(item => {
                         const precioSinDescuento = parseFloat(item.precio_sin_descuento);
                         const precioConDescuento = parseFloat(item.precio_con_descuento);
-                        const descuentoPorcentaje = parseFloat(item.descuento_porcentaje);
+                        const descuentoCalculado = (1 - precioConDescuento / precioSinDescuento) * 100;
                         return {
                             id: item.id,
                             name: item.nombre,
@@ -196,17 +233,23 @@ const Combo = {
                             stock: item.stock,
                             totalSinDescuento: precioSinDescuento,
                             current: precioConDescuento,
-                            descuentoPorcentaje: descuentoPorcentaje, // Usar el porcentaje directamente
+                            descuentoPorcentaje: descuentoCalculado,
                             estado: item.estado ? 'Activo' : 'Inactivo',
                             thumbnail: item.imagen_principal,
                             productos: [],
                             fechaCreacion: item.fecha_creacion
                         };
                     });
+                    console.log('Combos actualizados:', this.combos);
                 })
                 .catch(error => {
+                    clearTimeout(timeoutId);
                     console.error('Error al cargar combos:', error);
-                    this.errorMessage = error.message || 'Error al conectar con el servidor.';
+                    if (error.name === 'AbortError') {
+                        this.errorMessage = 'La solicitud tardó demasiado en responder. Por favor, intenta de nuevo.';
+                    } else {
+                        this.errorMessage = error.message || 'Error al conectar con el servidor.';
+                    }
                     this.combos = [];
                     this.$emit('error', this.errorMessage);
                 })
@@ -214,18 +257,70 @@ const Combo = {
                     this.isLoading = false;
                 });
         },
+        onImageChange(event) {
+            const file = event.target.files[0];
+            if (file) {
+                this.selectedImage = URL.createObjectURL(file);
+                console.log('Imagen seleccionada:', file);
+            } else {
+                this.selectedImage = null;
+            }
+        },
+        async uploadImage(comboId) {
+            const input = document.querySelector('input[type="file"]');
+            if (!input.files || !input.files[0]) return null; // No hay imagen nueva
+
+            const formData = new FormData();
+            formData.append('image', input.files[0]);
+            formData.append('comboId', comboId);
+
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/combos/upload-image', {
+                    method: 'POST',
+                    body: formData,
+                    signal: controller.signal
+                });
+
+                clearTimeout(timeoutId);
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `Error ${response.status}: No se pudo subir la imagen.`);
+                }
+
+                const data = await response.json();
+                return data.imageUrl; // URL de la imagen guardada
+            } catch (error) {
+                clearTimeout(timeoutId);
+                console.error('Error al subir la imagen:', error);
+                throw error;
+            }
+        },
         abrirModalEditarCombo(combo) {
+            console.log('Abriendo modal de edición para:', combo.name);
             this.editCombo = { ...combo };
             this.editError = null;
+            this.selectedImage = null; // Resetear la imagen seleccionada
             const modalElement = document.getElementById('editComboModal');
-            const modal = new bootstrap.Modal(modalElement);
-            modal.show();
-            modalElement.addEventListener('hidden.bs.modal', () => {
-                const trigger = document.querySelector(`button[title="Editar"]`) || document.activeElement;
-                trigger.focus();
-            }, { once: true });
+            if (modalElement) {
+                const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+                modal.show();
+                modalElement.addEventListener('hidden.bs.modal', () => {
+                    const trigger = document.querySelector(`button[title="Editar"]`) || document.activeElement;
+                    if (trigger) trigger.focus();
+                    // Resetear el input file al cerrar el modal
+                    const fileInput = document.querySelector('input[type="file"]');
+                    if (fileInput) fileInput.value = '';
+                    this.selectedImage = null;
+                }, { once: true });
+            } else {
+                console.error('Elemento del modal editComboModal no encontrado');
+            }
         },
-        guardarEdicion() {
+        async guardarEdicion() {
             const form = document.getElementById('editComboForm');
             if (!form.checkValidity()) {
                 form.classList.add('was-validated');
@@ -235,83 +330,120 @@ const Combo = {
             this.isSaving = true;
             this.editError = null;
             this.successMessage = null;
-            fetch(`http://127.0.0.1:5000/api/combos/${this.editCombo.id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    nombre: this.editCombo.name,
-                    descripcion: this.editCombo.descripcion,
-                    stock: this.editCombo.stock,
-                    precio_sin_descuento: this.editCombo.totalSinDescuento,
-                    precio_con_descuento: this.editCombo.current,
-                    descuento_porcentaje: this.editCombo.descuentoPorcentaje / 100, // Convertir a decimal para la API
-                    estado: this.editCombo.estado === 'Activo',
-                    imagen_principal: this.editCombo.thumbnail,
-                    productos: this.editCombo.productos
-                })
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.json().catch(() => ({}))
-                            .then(errorData => {
-                                throw new Error(errorData.message || `Error ${response.status}: No se pudo actualizar el combo.`);
-                            });
+
+            try {
+                // Subir la imagen si hay una nueva seleccionada
+                let newImageUrl = this.editCombo.thumbnail;
+                if (this.selectedImage) {
+                    newImageUrl = await this.uploadImage(this.editCombo.id);
+                    if (newImageUrl) {
+                        this.editCombo.thumbnail = newImageUrl;
                     }
-                    return response.json();
-                })
-                .then(() => {
-                    this.successMessage = 'Combo actualizado exitosamente.';
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('editComboModal'));
-                    modal.hide();
-                    form.classList.remove('was-validated');
-                    this.cargarCombos();
-                })
-                .catch(error => {
-                    console.error('Error al actualizar combo:', error);
-                    this.editError = error.message;
-                    this.$emit('error', error.message);
-                })
-                .finally(() => {
-                    this.isSaving = false;
+                }
+
+                // Actualizar los datos del combo
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+                const response = await fetch(`http://127.0.0.1:5000/api/combos/edit/${this.editCombo.id}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        nombre: this.editCombo.name,
+                        descripcion: this.editCombo.descripcion,
+                        stock: this.editCombo.stock,
+                        descuento_porcentaje: this.editCombo.descuentoPorcentaje,
+                        imagen_principal: this.editCombo.thumbnail,
+                        estado: this.editCombo.estado === 'Activo'
+                    }),
+                    signal: controller.signal
                 });
+
+                clearTimeout(timeoutId);
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `Error ${response.status}: No se pudo actualizar el combo.`);
+                }
+
+                const data = await response.json();
+                if (data.success === "0") {
+                    throw new Error(data.error || 'Error al actualizar el combo.');
+                }
+
+                this.successMessage = 'Combo actualizado exitosamente.';
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editComboModal'));
+                if (modal) modal.hide();
+                form.classList.remove('was-validated');
+                this.cargarCombos();
+            } catch (error) {
+                console.error('Error al actualizar combo:', error);
+                if (error.name === 'AbortError') {
+                    this.editError = 'La solicitud tardó demasiado en responder. Por favor, intenta de nuevo.';
+                } else {
+                    this.editError = error.message;
+                }
+                this.$emit('error', error.message);
+            } finally {
+                this.isSaving = false;
+            }
         },
         abrirModalEliminarCombo(combo) {
+            console.log('Abriendo modal de eliminación para:', combo.name);
             this.deleteCombo = { ...combo };
             const modalElement = document.getElementById('deleteComboModal');
-            const modal = new bootstrap.Modal(modalElement);
-            modal.show();
-            modalElement.addEventListener('hidden.bs.modal', () => {
-                const trigger = document.querySelector(`button[title="Eliminar"]`) || document.activeElement;
-                trigger.focus();
-            }, { once: true });
+            if (modalElement) {
+                const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+                modal.show();
+                modalElement.addEventListener('hidden.bs.modal', () => {
+                    const trigger = document.querySelector(`button[title="Eliminar"]`) || document.activeElement;
+                    if (trigger) trigger.focus();
+                }, { once: true });
+            } else {
+                console.error('Elemento del modal deleteComboModal no encontrado');
+            }
         },
         eliminarCombo() {
             if (!this.deleteCombo) return;
             this.isSaving = true;
             this.errorMessage = null;
             this.successMessage = null;
-            fetch(`http://127.0.0.1:5000/api/combos/${this.deleteCombo.id}`, {
-                method: 'DELETE'
+
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+            fetch(`http://127.0.0.1:5000/api/combos/delete/${this.deleteCombo.id}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                signal: controller.signal
             })
                 .then(response => {
+                    clearTimeout(timeoutId);
                     if (!response.ok) {
-                        return response.json().catch(() => ({}))
-                            .then(errorData => {
-                                throw new Error(errorData.message || `Error ${response.status}: No se pudo eliminar el combo.`);
-                            });
+                        return response.json().then(errorData => {
+                            throw new Error(errorData.error || `Error ${response.status}: No se pudo eliminar el combo.`);
+                        });
                     }
                     return response.json();
                 })
-                .then(() => {
+                .then(data => {
+                    if (data.success === "0") {
+                        throw new Error(data.error || 'Error al eliminar el combo.');
+                    }
                     this.successMessage = 'Combo eliminado correctamente.';
                     const modal = bootstrap.Modal.getInstance(document.getElementById('deleteComboModal'));
-                    modal.hide();
+                    if (modal) modal.hide();
                     this.deleteCombo = null;
                     this.cargarCombos();
                 })
                 .catch(error => {
+                    clearTimeout(timeoutId);
                     console.error('Error al eliminar combo:', error);
-                    this.errorMessage = error.message;
+                    if (error.name === 'AbortError') {
+                        this.errorMessage = 'La solicitud tardó demasiado en responder. Por favor, intenta de nuevo.';
+                    } else {
+                        this.errorMessage = error.message;
+                    }
                     this.$emit('error', error.message);
                 })
                 .finally(() => {

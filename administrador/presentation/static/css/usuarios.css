@@ -1,0 +1,550 @@
+/* css/styles.css */
+
+/* Reset y Estilos Generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    color: #731C2C; /* Rojo más oscuro */
+    background-color: #FAF2ED; /* Crema claro */
+    overflow-x: hidden;
+}
+
+/* Contenedor */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Header */
+.header {
+    background-color: #F5DACB; /* Crema más oscuro */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 15px 0;
+    transition: background-color 0.3s ease;
+}
+
+.header:hover {
+    background-color: #FEC3BA; /* Rosa claro */
+}
+
+.logo {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 2rem;
+    color: #A6323B; /* Rojo principal */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.logo:hover {
+    color: #731C2C; /* Rojo más oscuro */
+}
+
+.navbar-nav .nav-link {
+    color: #731C2C;
+    font-weight: 500;
+    font-size: 1.1rem;
+    padding: 10px 15px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #A6323B;
+    transform: scale(1.05);
+}
+
+.social-links .nav-link {
+    color: #731C2C;
+    font-size: 1.3rem;
+    padding: 10px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-links .nav-link:hover {
+    color: #A6323B;
+    transform: scale(1.2);
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='%23731C2C' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+/* Sección Bienvenida */
+.hero-section {
+    background-color: #FEC3BA; /* Rosa claro */
+    padding: 120px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255,255,255,0.2), transparent);
+    z-index: 1;
+    opacity: 0.5;
+}
+
+.hero-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+.subtitle {
+    display: block;
+    font-size: 1.1rem;
+    color: #A6323B; /* Rojo principal */
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 15px;
+    font-weight: 500;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    color: #731C2C;
+    margin-bottom: 25px;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.description {
+    font-size: 1.2rem;
+    color: #731C2C;
+    max-width: 700px;
+    margin: 0 auto;
+    font-weight: 400;
+    line-height: 1.8;
+}
+
+/* Sección Imagen Estática */
+.image-section img {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+    filter: brightness(0.9);
+    transition: filter 0.3s ease;
+}
+
+.image-section img:hover {
+    filter: brightness(1);
+}
+
+/* Sección Colecciones */
+.collections-section {
+    padding: 100px 0;
+    background-color: #FAF2ED; /* Crema claro */
+    position: relative;
+}
+
+.collection-item {
+    padding: 20px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: #731C2C;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    background-color: #FEC3BA; /* Rosa claro */
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.collection-item:hover,
+.collection-item.active {
+    color: #A6323B;
+    border-bottom-color: #A6323B;
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.collection-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    transition: transform 0.3s ease;
+}
+
+.collection-item:hover .collection-image {
+    transform: scale(1.05);
+}
+
+/* Sección Invitación al Catálogo */
+.catalog-invite-section {
+    padding: 100px 0;
+    background-color: #F6E5DB; /* Crema medio */
+    text-align: center;
+    position: relative;
+}
+
+.catalog-invite-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(to top, rgba(246, 229, 219, 0.8), transparent);
+    z-index: 1; /* Aseguramos que esté detrás del contenido */
+}
+
+/* CSS para enlaces router-link */
+.btn-catalog {
+    background-color: #A6323B; /* Rojo principal */
+    color: #FAF2ED; /* Crema claro */
+    padding: 15px 35px;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(166, 50, 59, 0.3);
+    display: inline-block; /* Importante para router-link */
+    cursor: pointer;
+    position: relative; /* Añadimos posicionamiento relativo */
+    z-index: 2; /* Aseguramos que esté por encima del ::after */
+}
+
+.btn-catalog:hover {
+    background-color: #911F2F; /* Rojo oscuro */
+    color: #FAF2ED;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(145, 31, 47, 0.4);
+    text-decoration: none; /* Evita subrayado en hover */
+}
+
+/* CSS adicional si usas button en lugar de router-link */
+button.btn-catalog {
+    font-family: inherit; /* Hereda la fuente del padre */
+    outline: none; /* Quita el outline por defecto */
+}
+
+button.btn-catalog:focus {
+    outline: 2px solid #A6323B;
+    outline-offset: 2px;
+}
+
+/* Estilos para router-link activo */
+.btn-catalog.router-link-active {
+    background-color: #911F2F;
+}
+
+/* Para asegurar que funcione en todos los estados */
+a.btn-catalog:visited,
+a.btn-catalog:link,
+.router-link-exact-active.btn-catalog {
+    color: #FAF2ED;
+    text-decoration: none;
+}
+
+/* Sección Productos Destacados */
+.products-section {
+    padding: 100px 0;
+    background-color: #FAF2ED; /* Crema claro */
+}
+
+.combo-card {
+    background-color: #FEC3BA; /* Rosa claro */
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.combo-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.combo-header {
+    width: 100%;
+    height: 220px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    transition: filter 0.3s ease;
+}
+
+.combo-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4));
+}
+
+.combo-card:hover .combo-header {
+    filter: brightness(1.1);
+}
+
+.combo-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    color: #FAF2ED;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.bg-success {
+    background-color: #A6323B; /* Rojo principal */
+}
+
+.bg-danger {
+    background-color: #911F2F; /* Rojo oscuro */
+}
+
+.combo-price {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    color: #FAF2ED;
+    font-weight: 700;
+    font-size: 1.3rem;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.combo-price small {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 400;
+}
+
+.combo-body {
+    padding: 20px;
+    text-align: center;
+    background-color: #FEC3BA;
+}
+
+.combo-body h5 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: #731C2C;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.combo-description {
+    font-size: 1rem;
+    color: #731C2C;
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+.combo-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    background-color: #F5DACB; /* Crema más oscuro */
+    border-top: 1px solid rgba(115, 28, 44, 0.1);
+}
+
+.stock-info {
+    font-size: 1rem;
+    color: #731C2C;
+    font-weight: 500;
+}
+
+/* Image Section */
+.image-section {
+    width: 100%;
+    overflow: hidden; /* Evita que la imagen se desborde */
+}
+
+.image-section .container-fluid {
+    position: relative;
+    width: 100%;
+    height: auto;
+}
+
+.custom-image {
+    width: 100%;
+    max-width: 100%; /* Cambiamos a 100% para que no se limite el ancho */
+    height: auto;
+    object-fit: contain; /* Asegura que la imagen se vea completa sin recortarse */
+    display: block; /* Elimina espacios adicionales debajo */
+    margin: 0 auto; /* Centra la imagen */
+    max-height: 600px; /* Ajustamos la altura máxima para que no sea tan grande */
+}
+
+
+/* Sección Contacto */
+.contact-section {
+    padding: 100px 0;
+    background-color: #F6E5DB; /* Crema medio */
+    text-align: center;
+    position: relative;
+}
+
+.contact-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(246, 229, 219, 0.3), transparent);
+    z-index: 1;
+    opacity: 0.5;
+}
+
+.contact-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+.btn-contact {
+    background-color: #A6323B; /* Rojo principal */
+    color: #FAF2ED; /* Crema claro */
+    padding: 15px 35px;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(166, 50, 59, 0.3);
+}
+
+.btn-contact:hover {
+    background-color: #911F2F; /* Rojo oscuro */
+    color: #FAF2ED;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(145, 31, 47, 0.4);
+}
+
+/* Footer */
+.footer {
+    background-color: #731C2C; /* Rojo más oscuro */
+    color: #FAF2ED;
+    padding: 60px 0;
+    position: relative;
+}
+
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(115, 28, 44, 0.8), rgba(115, 28, 44, 1));
+    z-index: 1;
+}
+
+.footer .container {
+    position: relative;
+    z-index: 2;
+}
+
+.footer .logo {
+    color: #FAF2ED;
+    font-size: 2rem;
+}
+
+.footer-address,
+.footer-copyright {
+    font-size: 1rem;
+    margin-top: 15px;
+    opacity: 0.9;
+}
+
+.footer-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.footer-list {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-list li {
+    margin-bottom: 12px;
+}
+
+.footer-list a {
+    color: #FAF2ED;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.footer-list a:hover {
+    color: #FEC3BA;
+}
+
+.footer-socials {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-socials li a {
+    color: #FAF2ED;
+    font-size: 1.5rem;
+    margin-right: 15px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.footer-socials li a:hover {
+    color: #FEC3BA;
+    transform: scale(1.2);
+}
+
+/* Ajustes Responsivos */
+@media (max-width: 767px) {
+    .title {
+        font-size: 2.5rem;
+    }
+    .image-section img {
+        height: 300px;
+    }
+    .combo-header {
+        height: 180px;
+    }
+    .combo-body h5 {
+        font-size: 1.3rem;
+    }
+    .collection-image {
+        height: 180px;
+    }
+    .logo {
+        font-size: 1.5rem;
+    }
+    .navbar-nav .nav-link {
+        font-size: 1rem;
+        padding: 8px 10px;
+    }
+    .social-links .nav-link {
+        font-size: 1.1rem;
+    }
+}

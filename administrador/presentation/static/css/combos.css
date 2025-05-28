@@ -1,4 +1,8 @@
 /* combos.css - Estilos completos para la página de Combos */
+
+/* ==========================================================================
+   Definición de Variables
+   ========================================================================== */
 :root {
     /* Paleta de colores */
     --color-primary: #FF9E8F;        /* Coral principal */
@@ -24,7 +28,9 @@
     --color-turquoise: #7BC4B8;      /* Turquesa */
 }
 
-/* Estilos base */
+/* ==========================================================================
+   Estilos Base
+   ========================================================================== */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -45,14 +51,18 @@ a {
     color: inherit;
 }
 
-/* Contenedor principal */
+/* ==========================================================================
+   Contenedor Principal
+   ========================================================================== */
 .bloomy-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem;
 }
 
-/* Header */
+/* ==========================================================================
+   Header
+   ========================================================================== */
 .header {
     text-align: center;
     margin-bottom: 1.5rem;
@@ -77,7 +87,9 @@ a {
     font-weight: 500;
 }
 
-/* Navegación por pestañas */
+/* ==========================================================================
+   Navegación por Pestañas
+   ========================================================================== */
 .nav-pills {
     background-color: var(--color-light);
     border-radius: 8px 8px 0 0;
@@ -116,7 +128,14 @@ a {
     font-size: 1.1rem;
 }
 
-/* Contenedor de papel vintage */
+/* Contenido de las Pestañas */
+.tab-content > div {
+    display: block !important;
+}
+
+/* ==========================================================================
+   Contenedor de Papel Vintage
+   ========================================================================== */
 .vintage-paper {
     background-color: var(--color-paper);
     border: 1px solid var(--color-border);
@@ -127,7 +146,9 @@ a {
     margin-bottom: 2rem;
 }
 
-/* Botones */
+/* ==========================================================================
+   Botones
+   ========================================================================== */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -172,7 +193,54 @@ a {
     background-color: var(--color-text-dark);
 }
 
-/* Tarjetas de combos */
+.btn-danger {
+    padding: 2px 6px;
+    font-size: 0.875rem;
+}
+
+/* Botón de Acción */
+.action-btn {
+    background-color: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    padding: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.action-btn:hover {
+    transform: scale(1.2);
+}
+
+.action-btn.edit:hover {
+    color: var(--color-success);
+}
+
+.action-btn.delete:hover {
+    color: var(--color-danger);
+}
+
+/* Enlace de Volver */
+.back-link {
+    color: var(--color-turquoise);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    gap: 0.5rem;
+}
+
+.back-link:hover {
+    color: var(--color-coral);
+    transform: translateX(-5px);
+}
+
+/* ==========================================================================
+   Tarjetas de Combos
+   ========================================================================== */
 .combo-card {
     background-color: var(--color-paper);
     border-radius: 8px;
@@ -286,7 +354,16 @@ a {
     color: var(--color-danger) !important;
 }
 
-/* Formularios */
+/* ==========================================================================
+   Formularios
+   ========================================================================== */
+.form-label {
+    color: var(--color-text-dark);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
 .form-control, .form-select {
     background-color: white;
     border: 1px solid var(--color-border);
@@ -295,7 +372,9 @@ a {
     font-family: 'Roboto', sans-serif;
     color: var(--color-text-dark);
     transition: all 0.3s ease;
-    width: 100%;
+    /* Combinando los dos bloques para resolver el conflicto */
+    width: auto; /* Priorizamos 'width: auto' ya que es más reciente y específico para AsignarPro */
+    display: inline-block;
     margin-bottom: 1rem;
 }
 
@@ -303,13 +382,6 @@ a {
     border-color: var(--color-accent);
     box-shadow: 0 0 0 0.25rem rgba(123, 196, 184, 0.15);
     outline: none;
-}
-
-.form-label {
-    color: var(--color-text-dark);
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-    display: block;
 }
 
 .input-group {
@@ -324,17 +396,20 @@ a {
     border-radius: 8px 0 0 8px;
 }
 
-/* Subida de imágenes */
+/* ==========================================================================
+   Subida de Imágenes
+   ========================================================================== */
 .image-upload-container {
     position: relative;
+    width: 100%;
     margin-bottom: 1rem;
 }
 
 .image-preview {
+    position: relative;
+    overflow: hidden;
     border: 2px dashed var(--color-border);
     border-radius: 8px;
-    overflow: hidden;
-    position: relative;
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -346,6 +421,7 @@ a {
 .image-preview img {
     width: 100%;
     height: auto;
+    object-fit: cover;
     display: block;
 }
 
@@ -353,23 +429,35 @@ a {
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(255, 255, 255, 0.7);
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    color: var(--color-primary);
+    align-items: center;
+    color: white;
     opacity: 0;
     transition: opacity 0.3s ease;
+    cursor: pointer;
 }
 
-.image-preview:hover .upload-overlay {
+.upload-overlay:hover {
     opacity: 1;
 }
 
-/* Tablas */
+.upload-overlay i {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.upload-overlay span {
+    font-size: 14px;
+}
+
+/* ==========================================================================
+   Tablas
+   ========================================================================== */
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -388,75 +476,27 @@ a {
     font-weight: 600;
 }
 
+.product-table {
+    width: 100%;
+}
+
+.product-table th, .product-table td {
+    vertical-align: middle;
+}
+
 .product-table tr:hover {
     background-color: rgba(255, 158, 143, 0.05);
 }
 
-/* Acciones */
-.action-btn {
-    background-color: transparent;
-    border: none;
-    color: var(--color-text-muted);
-    transition: all 0.3s ease;
-    cursor: pointer;
-    padding: 0.5rem;
-    font-size: 1.1rem;
+/* Estilos Específicos para Asignar Productos */
+.asignar-pro-container {
+    display: block !important;
+    visibility: visible !important;
 }
 
-.action-btn:hover {
-    transform: scale(1.2);
-}
-
-.action-btn.edit:hover {
-    color: var(--color-success);
-}
-
-.action-btn.delete:hover {
-    color: var(--color-danger);
-}
-
-/* Tarjetas de estadísticas */
-.stat-card {
-    border-radius: 8px;
-    padding: 1.5rem;
-    color: white;
-    display: flex;
-    align-items: center;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 1rem;
-}
-
-.stat-card.bg-peach {
-    background-color: var(--color-peach);
-}
-
-.stat-card.bg-mint {
-    background-color: var(--color-mint);
-    color: var(--color-text-dark);
-}
-
-.stat-card.bg-turquoise {
-    background-color: var(--color-turquoise);
-}
-
-.stat-icon {
-    font-size: 2rem;
-    margin-right: 1.5rem;
-    opacity: 0.8;
-}
-
-.stat-content h3 {
-    font-size: 1.75rem;
-    margin-bottom: 0.25rem;
-}
-
-.stat-content p {
-    margin-bottom: 0;
-    opacity: 0.9;
-    font-size: 0.9rem;
-}
-
-/* Modal de productos */
+/* ==========================================================================
+   Modal de Productos (aunque ya no se usa, se mantiene por referencia)
+   ========================================================================== */
 .product-item-selectable {
     display: flex;
     align-items: center;
@@ -506,7 +546,52 @@ a {
     color: var(--color-success);
 }
 
-/* Paginación */
+/* ==========================================================================
+   Tarjetas de Estadísticas
+   ========================================================================== */
+.stat-card {
+    border-radius: 8px;
+    padding: 1.5rem;
+    color: white;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+}
+
+.stat-card.bg-peach {
+    background-color: var(--color-peach);
+}
+
+.stat-card.bg-mint {
+    background-color: var(--color-mint);
+    color: var(--color-text-dark);
+}
+
+.stat-card.bg-turquoise {
+    background-color: var(--color-turquoise);
+}
+
+.stat-icon {
+    font-size: 2rem;
+    margin-right: 1.5rem;
+    opacity: 0.8;
+}
+
+.stat-content h3 {
+    font-size: 1.75rem;
+    margin-bottom: 0.25rem;
+}
+
+.stat-content p {
+    margin-bottom: 0;
+    opacity: 0.9;
+    font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   Paginación
+   ========================================================================== */
 .pagination {
     display: flex;
     justify-content: center;
@@ -525,6 +610,13 @@ a {
     color: var(--color-primary);
 }
 
+.page-item.active .page-link {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+/* Acciones de Colección */
 .collection-actions {
     display: flex;
     justify-content: flex-end;
@@ -532,29 +624,9 @@ a {
     margin-top: 1rem;
 }
 
-.page-item.active .page-link {
-    background-color: var(--color-primary);
-    border-color: var(--color-primary);
-    color: white;
-}
-
-.back-link {
-    color: var(--color-turquoise);
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    transition: all 0.3s ease;
-    margin-bottom: 1rem;
-    font-weight: 600;
-    gap: 0.5rem;
-}
-
-.back-link:hover {
-    color: var(--color-coral);
-    transform: translateX(-5px);
-}
-
-/* Footer */
+/* ==========================================================================
+   Footer
+   ========================================================================== */
 .footer {
     text-align: center;
     margin-top: 2rem;
@@ -564,7 +636,9 @@ a {
     padding-top: 1rem;
 }
 
-/* Responsive */
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
 @media (max-width: 768px) {
     .bloomy-container {
         padding: 1rem;
