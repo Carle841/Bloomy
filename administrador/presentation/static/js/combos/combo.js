@@ -49,14 +49,7 @@ const Combo = {
                 {{ successMessage }}
             </div>
             <div v-else class="d-flex justify-content-between align-items-center mb-4">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" class="form-control" placeholder="Buscar combos..." disabled title="Búsqueda no implementada">
-                </div>
                 <div>
-                    <button class="btn btn-bloomy-outline me-2">
-                        <i class="fas fa-filter me-2"></i>Filtrar
-                    </button>
                     <button class="btn btn-bloomy">
                         <i class="fas fa-file-export me-2"></i>Exportar
                     </button>

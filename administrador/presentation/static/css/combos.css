@@ -615,6 +615,9 @@ a {
     border-color: var(--color-primary);
     color: white;
 }
+.border-danger {
+    border: 1px solid #dc3545 !important;
+}
 
 /* Acciones de Colección */
 .collection-actions {

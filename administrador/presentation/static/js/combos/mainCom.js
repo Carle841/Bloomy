@@ -11,7 +11,7 @@ export default {
     },
     template: /* html */`
         <div class="bloomy-container">
-            <a href="../index3.html" class="back-link">
+            <a href="/" class="back-link">
                 <i class="fas fa-arrow-left"></i> Volver al Inicio
             </a>
             <div class="vintage-paper">
