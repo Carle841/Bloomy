@@ -93,3 +93,23 @@ class UsuarioRepositoryPgImpl(UsuarioRepositoryPort):
                 contraseña=f["contraseña"]
             ) for f in filas
         ]
+        
+    def count_by_roles(self) -> dict:
+        filas = self.db.queryall("""
+            SELECT id_rol, COUNT(*) as cantidad
+            FROM tienda.usuarios
+            GROUP BY id_rol
+        """, {})
+
+        resultado = {"administradores": 0, "clientes": 0}
+        for fila in filas:
+            if fila["id_rol"] == 1:
+                resultado["administradores"] = fila["cantidad"]
+            elif fila["id_rol"] == 2:
+                resultado["clientes"] = fila["cantidad"]
+
+        return resultado
+
+    def count_all(self) -> int:
+        fila = self.db.queryone("SELECT COUNT(*) as total FROM tienda.usuarios", {})
+        return fila["total"]

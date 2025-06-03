@@ -71,3 +71,7 @@ class ProveedoresRepositoryPgImpl(ProveedorRepositoryPort):
                 direccion=f["direccion"]
             ) for f in filas
         ]
+
+    def count_all(self) -> int:
+        fila = self.db.queryone("SELECT COUNT(*) as total FROM tienda.proveedores", {})
+        return fila["total"]

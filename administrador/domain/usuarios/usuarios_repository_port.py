@@ -21,3 +21,11 @@ class UsuarioRepositoryPort(ABC):
     @abstractmethod
     def find(self, filtro: str) -> list[Usuario]:
         pass
+    
+    @abstractmethod
+    def count_by_roles(self) -> dict:
+        pass
+
+    @abstractmethod
+    def count_all(self) -> int:
+        pass

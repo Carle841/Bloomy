@@ -33,3 +33,4 @@ from administrador.presentation.controllers.combo_api_controller import *
 from administrador.presentation.controllers.combos_productos_api_controller import *
 from administrador.presentation.controllers.proveedores_api_controller import *
 from administrador.presentation.controllers.inventario_api_controller import *
+from administrador.presentation.controllers.usuarios_proveedores_api_controller import *
