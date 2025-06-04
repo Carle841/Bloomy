@@ -5,6 +5,10 @@ from administrador import app
 def site_index():
     return render_template('site/index.html', title='BloomyArt')
 
+@app.route('/administracion')
+def administracion():
+    return render_template('administracion/index.html', title='Administración')
+
 @app.route('/categorias')
 def categorias():
     return render_template('categorias/index.html', title='Categorias' )
@@ -20,6 +24,10 @@ def colecciones():
 @app.route('/combos')
 def combos():
     return render_template('combos/index.html', title='Combos' )
+
+@app.route('/inventario')
+def inventario():
+    return render_template('inventario/index.html', title='Inventario' )
 
 @app.route('/principal')
 def principal():

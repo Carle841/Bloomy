@@ -5,13 +5,15 @@ export default {
     return {
       
       menuItems: [
-        { title: 'Productos', icon: 'box-open', link: '/productos' },
+        { title: 'Administración', icon: 'cogs', link: '/administracion' },
         { title: 'Ventas', icon: 'chart-line', link: '/ventas' },
         { title: 'Compras', icon: 'shopping-basket', link: '/compras' },
-        { title: 'Combos', icon: 'layer-group', link: '/combos' },
-        { title: 'Administración', icon: 'cogs', link: '/administracion' },
-        { title: 'Categorias', icon: 'tags', link: '/categorias' },
         { title: 'Colecciones', icon: 'tags', link: '/colecciones' },
+        { title: 'Categorias', icon: 'tags', link: '/categorias' },
+        { title: 'Productos', icon: 'box-open', link: '/productos' },
+        { title: 'Combos', icon: 'layer-group', link: '/combos' },
+        { title: 'Inventario', icon: 'tags', link: '/inventario' },
+
       ]
     };
   },
