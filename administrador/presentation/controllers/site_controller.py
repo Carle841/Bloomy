@@ -9,6 +9,10 @@ def site_index():
 def administracion():
     return render_template('administracion/index.html', title='Administración')
 
+@app.route('/compras')
+def compras():
+    return render_template('compras/index.html', title='Compras')
+
 @app.route('/categorias')
 def categorias():
     return render_template('categorias/index.html', title='Categorias' )
