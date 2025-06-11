@@ -6,8 +6,37 @@ from administrador.application.usuarios.eliminar_usuario_use_case import Elimina
 from administrador.application.usuarios.obtener_usuario_use_case import ObtenerUsuarioUseCase
 from administrador.application.usuarios.buscar_usuario_use_case import BuscarUsuariosUseCase
 from administrador.application.usuarios.actualizar_usuario_use_case import ActualizarUsuarioUseCase
+from administrador.application.usuarios.autenticar_usuario_use_case import AutenticarUsuarioUseCase
 from administrador import app, db
 from datetime import datetime
+
+@app.route("/api/auth/login", methods=["POST"])
+def auth_api_login():
+    usuarios_repository = UsuarioRepositoryPgImpl(db)
+    caso_uso = AutenticarUsuarioUseCase(usuarios_repository)
+    
+    data = request.json
+    
+    try:
+        result = caso_uso.execute(
+            email=data["email"],
+            contraseña=data["contraseña"]
+        )
+        
+        response = {
+            "success": "1",
+            "user": result["user"]
+        }
+    except Exception as e:
+        response = {
+            "success": "0",
+            "message": str(e)
+        }
+    
+    return app.response_class(
+        response=json.dumps(response),
+        mimetype='application/json'
+    )
 
 @app.route("/api/usuarios/create", methods=["POST"])
 def usuarios_api_create():
@@ -79,7 +108,7 @@ def usuarios_api_index():
                 "id": usuario.get_id(),
                 "nombre": usuario.get_nombre(),
                 "email": usuario.get_email(),
-                "rol": usuario.get_rol(),  # ya es el nombre
+                "rol": usuario.get_rol(),
                 "estado": usuario.get_estado(),
                 "ultimo_acceso": str(usuario.get_ultimo_acceso()),
                 "fecha_registro": str(usuario.get_fecha_registro()),
