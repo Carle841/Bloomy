@@ -36,3 +36,5 @@ from administrador.presentation.controllers.inventario_api_controller import *
 from administrador.presentation.controllers.usuarios_proveedores_api_controller import *
 from administrador.presentation.controllers.ordenes_compras_api_controller import *
 from administrador.presentation.controllers.detalles_orden_compra_api_controller import *
+from administrador.presentation.controllers.ventas_api_controller import *
+from administrador.presentation.controllers.detalles_venta_api_controller import *
